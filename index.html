@@ -1,40 +1,732 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="utf-8" />
 
-		<title>reveal.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+    <title>🐍 OSS lessons 🐍</title>
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+    <link rel="icon" type="image/x-icon" href="img/bloomberg_logo_github.png" />
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/white-contrast.css" />
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+    <style>
+      .reveal pre {
+        margin-top: 0;
+        margin-bottom: 0;
+        box-shadow: none;
+        font-size: 0.5em;
+      }
+      .reveal code,
+      pre > code {
+        font-family: "Inconsolata Patched", monospace;
+        text-rendering: geometricPrecision;
+        font-variant-ligatures: none;
+        line-height: 1;
+      }
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+      @font-face {
+        font-family: "Inconsolata Patched";
+        src:
+          local("Inconsolata Patched"),
+          url("dist/theme/fonts/Inconsolata Regular Nerd Font Complete Mono.otf") format("opentype");
+      }
+      .maintain img {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <h1>Lessons learned maintaining open source Python projects</h1>
+          <p>
+            <small
+              >by <a href="https://bernat.tech">Bernat Gabor</a> /
+              <a href="https://twitter.com/gjbernat">@gjbernat</a> /
+              <a href="https://github.com/bloomberg">Bloomberg</a>
+            </small>
+            <br />
+            <a href="https://gaborbernat.github.io/py-texas-24/">https://gaborbernat.github.io/py-texas-24</a>
+          </p>
+        </section>
+
+        <section>
+          <h3>Who am I?</h3>
+          <div>
+            <ul>
+              <li>software engineer at Bloomberg (DTI Storage Platform team)</li>
+              <li class="fragment">based out of Los Angeles, USA - from Transylvania</li>
+            </ul>
+          </div>
+          <div class="fragment">
+            <img
+              alt="Transylvania"
+              src="./img/transylvania.png"
+              style="max-height: 810px; margin-left: auto; margin-right: auto; margin-bottom: 0"
+            />
+            <div style="font-size: 10px; margin: 0 0" class="rlicense-declaration">
+              This file is licensed under the
+              <a href="https://en.wikipedia.org/wiki/en:Creative_Commons" class="extiw" title="w:en:Creative Commons"
+                >Creative Commons</a
+              >
+              <a rel="nofollow" class="external text" href="https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+                >Attribution-Share Alike 4.0 International</a
+              >
+              license.
+            </div>
+          </div>
+        </section>
+        <section>
+          <h3>Who am I?</h3>
+          <div>
+            <ul>
+              <li>OSS contributor <a href="https://github.com/gaborbernat">@ github/gaborbernat</a></li>
+              <li class="fragment">blog <a href="https://bernat.tech/about/">bernat.tech</a></li>
+              <li class="fragment">
+                member of the <span style="color: orange">Py</span>thon <span style="color: orange">P</span>ackaging
+                <span style="color: orange">A</span>uthority:
+                <ul>
+                  <li><span style="color: orange; font-style: italic">virtualenv</span></li>
+                  <li><span style="color: orange; font-style: italic">pipx</span></li>
+                  <li><span style="color: orange; font-style: italic">build</span></li>
+                </ul>
+              </li>
+              <li class="fragment">
+                maintainer of some popular OSS packages
+                <ul>
+                  <li>
+                    <span style="color: orange; font-style: italic">platformdirs</span>,
+                    <span style="color: orange; font-style: italic">filelock</span>
+                  </li>
+                  <li>
+                    <span style="color: orange; font-style: italic">tox</span>,
+                    <span style="color: orange; font-style: italic">pyproject-api</span>
+                  </li>
+
+                  <li>
+                    <span style="color: orange; font-style: italic">sphinx-autodoc-typehints</span>,
+                    <span style="color: orange; font-style: italic">sphinx-argparse-cli</span>
+                  </li>
+                  <li><span style="color: orange; font-style: italic">pipdeptree</span></li>
+                  <li>
+                    <span style="color: orange; font-style: italic">pytest-env</span>,
+                    <span style="color: orange; font-style: italic">pytest-print</span>
+                  </li>
+                  <li>
+                    <span style="color: orange; font-style: italic">pyproject-fmt</span>,
+                    <span style="color: orange; font-style: italic">tox-ini-fmt</span>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2>😎 parent to two Yorkshire Terriers</h2>
+          <h3>Silky & Junior</h3>
+          <div>
+            <img
+              alt="Silky & Junior"
+              src="./img/silky_junior_look_up.jpg"
+              style="max-height: 840px; margin-left: auto; margin-right: auto; margin-bottom: 0"
+            />
+            <p style="font-size: 10px; margin: 0 0">Copyright 2024 Bernat Gabor All rights reserved</p>
+          </div>
+        </section>
+
+        <section>
+          <h1>What is a maintainer?</h1>
+          <p style="font-style: italic">Lessons learned maintaining open source Python projects</p>
+          <ul class="fragment">
+            Per
+            <a href="https://www.dictionary.com/browse/maintainer">dictionary.com</a>
+            is defined as
+            <li>to keep in existence or continuance; preserve; retain</li>
+            <li>to keep in an appropriate condition, operation, or force; keep unimpaired</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>What is a maintainer?</h1>
+          <p style="font-style: italic">Lessons learned maintaining open source Python projects</p>
+          <ul>
+            Per
+            <a href="https://www.dictionary.com/browse/maintainer">dictionary.com</a>
+            is defined as
+            <li>to keep in existence or continuance; preserve; retain</li>
+            <li>
+              to
+              <span style="color: orange; font-style: italic; font-weight: bolder"
+                >keep in an appropriate condition, operation</span
+              >, or force; keep unimpaired
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>What is <span style="color: orange; font-style: italic; font-weight: bolder">not</span> a maintainer?</h1>
+          <ul>
+            <span style="color: orange; font-weight: bolder">(in my humble opinion)</span>
+            <li class="fragment">adding new features</li>
+            <li class="fragment">fixing issues</li>
+          </ul>
+          <p class="fragment">
+            that would be a <span style="color: orangered; font-weight: bolder">contributor</span
+            ><span class="fragment">, however you can fill both roles</span>
+          </p>
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Ensure package and information about it is discoverable</h4>
+          <img data-src="img/project_info.png" style="margin-bottom: 0; border-bottom: 0; max-height: 690px" />
+          <pre class="toml"><code data-trim data-noescape>
+            [project]
+            name = "tox"
+            urls.Documentation = "https://tox.wiki"
+            urls.Homepage = "https://tox.wiki"
+            urls."Release Notes" = "https://tox.wiki/en/latest/changelog.html"
+            urls.Source = "https://github.com/tox-dev/tox"
+            urls.Tracker = "https://github.com/tox-dev/tox/issues"
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Ensure consumption and contributing is familiar</h4>
+          <ul>
+            <li class="fragment">
+              Follow the <span style="color: orange; font-weight: bolder">law of least surprises</span>:
+              <ul>
+                <li>Installable via pip (publish to PyPI), conda for bonus points</li>
+                <li>Source code available via GitHub (Gitlab otherwise)</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Set ground rules - code of conduct</h4>
+          <img data-src="img/coc.png" style="margin-bottom: 0; border-bottom: 0; max-height: 810px" />
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Groom incoming bug reports</h4>
+          <img data-src="img/groom_issues.png" style="margin-bottom: 0; border-bottom: 0; max-height: 810px" />
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Use templates</h4>
+          <img data-src="img/templates.png" style="margin-bottom: 0; border-bottom: 0; max-height: 410px" />
+          <br />
+          <img data-src="img/template_location.png" style="margin-bottom: 0; border-bottom: 0; max-height: 410px" />
+        </section>
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Use templates</h4>
+          <img data-src="img/bug_template.png" style="margin-bottom: 0; border-bottom: 0; max-height: 810px" />
+        </section>
+
+        <section>
+          <h1>Communication</h1>
+          <ul>
+            <li>
+              is deceptively hard - see
+              <a href="https://nedbatchelder.com/text/key23.htmlhttps://nedbatchelder.com/text/key23.html"
+                >Ned Batchelder - People: The API User’s Guide</a
+              >
+            </li>
+            <div class="fragment">
+              <li>we all have different communication style</li>
+              <img data-src="img/non_standard.webp" style="margin-bottom: 0; border-bottom: 0; max-height: 610px" />
+              <p style="font-size: 10px; margin: 0 0">Copyright 2023 Ned Batchelder All rights reserved</p>
+            </div>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Communication</h1>
+          <ul>
+            is deceptively hard - see
+            <a href="https://nedbatchelder.com/text/key23.htmlhttps://nedbatchelder.com/text/key23.html"
+              >Ned Batchelder - People: The API User’s Guide</a
+            >
+            <li>in written form is even harder, because you loose context, attention</li>
+          </ul>
+          <img data-src="img/stressed_slack.webp" style="margin-bottom: 0; border-bottom: 0; max-height: 610px" />
+          <p style="font-size: 10px; margin: 0 0">Copyright 2023 Ned Batchelder All rights reserved</p>
+        </section>
+
+        <section>
+          <h1>Communication</h1>
+          <h2 style="color: orange">In general</h2>
+          <ul>
+            <li class="fragment">be polite and patient</li>
+            <li class="fragment">give benefit of doubt, could be different communication style</li>
+            <li class="fragment">
+              refrain from tagging people (especially maintainers) upfront
+              <ul>
+                <li>but is generally alright to tag if no response in a week</li>
+              </ul>
+            </li>
+          </ul>
+          <br />
+          <img
+            alt="Silky & Junior"
+            src="./img/silky_sand.jpg"
+            style="max-width: 900px; margin-left: auto; margin-right: auto; margin-bottom: 0"
+          />
+          <p style="font-size: 10px; margin: 0 0">Copyright 2024 Bernat Gabor All rights reserved</p>
+        </section>
+
+        <section>
+          <h2 style="color: orange">Creating bug reports - Tips for users</h2>
+          <h4 style="color: darkgreen">Try creating easily reproducible reports</h4>
+          <ul>
+            <li class="fragment">Always start to see if there's an issue already open</li>
+            <li class="fragment">Docker image reproducing the issue</li>
+            <li class="fragment">A Github repository containing all the files I need to reproduce it</li>
+            <li class="fragment">
+              Detailed description of:
+              <ul>
+                <li>Environment you run in (OS, Python version, packages installed)</li>
+                <li>How did you install the package (PyPI or OS package manager)</li>
+                <li>Full stacktrace of the error</li>
+                <li>When in doubt error on side of more than less, but at least what the template requires</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Groom incoming feature requests</h4>
+          <img data-src="img/feature_ok.png" style="margin-bottom: 0; border-bottom: 0; max-height: 810px" />
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Reject feature requests</h4>
+          <img data-src="img/feature_nok_pres.png" style="margin-bottom: 0; border-bottom: 0; max-width: 1000px" />
+          <img data-src="img/feature_nok_conc.png" style="margin-bottom: 0; border-bottom: 0; max-width: 1000px" />
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Reject feature requests</h4>
+          <p>Think of the long term good rather than short term</p>
+          <img data-src="img/junior_bed.jpg" style="margin-bottom: 0; border-bottom: 0; max-height: 800px" />
+          <p style="font-size: 10px; margin: 0 0">Copyright 2024 Bernat Gabor All rights reserved</p>
+        </section>
+
+        <section>
+          <h2 style="color: orange">Tips for users</h2>
+          <h4 style="color: darkgreen">How to fill excellent feature requests</h4>
+          <ul>
+            <li class="fragment">Read the documentation to check if alternative solution exists</li>
+            <li class="fragment">If in doubt open a discussion to enquire how to solve problem X</li>
+            <li class="fragment">Indicate if you're willing to do the work</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Review pull requests</h4>
+          <img data-src="img/pr_review.png" style="margin-bottom: 0; border-bottom: 0; max-height: 810px" />
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Cut releases</h4>
+          <img data-src="img/release.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Thank from contributors upon merge and/or release</h4>
+          <img data-src="img/thanks_merge.png" style="margin-bottom: 0; border-bottom: 0; max-height: 880px" />
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Ensures the projects architecture remains consistent</h4>
+          <ul>
+            This is more of an art than exact science
+            <li class="fragment">make sure the project has right separation of concerns</li>
+            <li class="fragment">when adding new code make sure it lives in the appropriate section</li>
+            <li class="fragment">
+              if has a plugin system use it, rather than introduce a new mechanism to extend the code
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Ensure the project has a release changelog</h2>
+          <h5>Where and how it's generated matters less</h5>
+          <img data-src="img/release.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
+        </section>
+
+        <section>
+          <h2>Ensure the project has a release changelog</h2>
+          <h5>Where and how it's generated matters less</h5>
+          <img data-src="img/changelog.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h4>Let people help you out</h4>
+          <h5>
+            <span style="color: orange; font-weight: bolder"
+              >IMHO -
+              <span style="color: orange; font-style: italic; font-weight: bolder"
+                >keep in an appropriate condition, operation</span
+              ></span
+            >
+          </h5>
+
+          <ul class="fragment">
+            <li style="color: darkolivegreen; font-weight: bolder">
+              Make it easy to contribute to the project
+              <ul>
+                <li style="color: darkolivegreen; font-weight: black">
+                  That is keep the lights on and operational so other people can help out easily
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <br />
+          <img
+            alt="Silky & Junior"
+            src="./img/silky_junior_together.jpg"
+            style="max-height: 640px; margin-left: auto; margin-right: auto; margin-bottom: 0"
+          />
+          <p style="font-size: 10px; margin: 0 0">Copyright 2024 Bernat Gabor All rights reserved</p>
+        </section>
+
+        <section>
+          <h3>How to attract people to your projects</h3>
+          <h4>write documentation on how to contribute</h4>
+          <img data-src="img/contributing_github.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
+        </section>
+
+        <section>
+          <h3>How to attract people to your projects</h3>
+          <h4>write documentation on how to contribute</h4>
+          <img data-src="img/contributing_webpage.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
+        </section>
+
+        <section>
+          <h3>How to attract people to your projects</h3>
+          <h4>Ensure CI remains green</h4>
+          <p>Run it daily on main branch and action failure e-mails</p>
+          <img data-src="img/ci_green.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
+        </section>
+
+        <section>
+          <h3>How to attract people to your projects</h3>
+          <h4>Ensure CI remains green</h4>
+          <p>Run it daily on main branch and action failure e-mails</p>
+          <img data-src="img/ci_red.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
+        </section>
+
+        <section>
+          <h3>How to attract people to your projects</h3>
+          <h4>Ensure CI remains fast</h4>
+          <p>Quick feedback, more likely to stick pushing it through</p>
+          <img data-src="img/ci_green.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
+        </section>
+
+        <section>
+          <h3>How to attract people to your projects</h3>
+          <h4>Ensure CI remains fast</h4>
+          <p>Quick feedback, more likely to stick pushing it through</p>
+          <img data-src="img/ci_red.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
+        </section>
+
+        <section>
+          <h3>How to attract people to your projects</h3>
+          <h4>Ensure your documentation build works and run it part of PR</h4>
+          <p>readthedocs.org is great for this</p>
+          <img data-src="img/readthedocs_ci.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
+        </section>
+
+        <section>
+          <h3>How to attract people to your projects</h3>
+          <h4>Ensure your documentation build works and run it part of PR</h4>
+          <p>readthedocs.org is great for this</p>
+          <img data-src="img/readthedocs_pr.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
+        </section>
+
+        <section>
+          <h3>How to attract people to your projects</h3>
+          <h4>Ensure your documentation build works and run it part of PR</h4>
+          <p>readthedocs.org is great for this</p>
+          <img data-src="img/readthedocs_dashboard.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
+        </section>
+
+        <section>
+          <h2>What does a maintainer do?</h2>
+          <h3>Make it easy to do releases</h3>
+          <ul>
+            <li>Release often (and small diffs)</li>
+            <li class="fragment">contributors can use quicker their changes - more motivated to contribute more</li>
+            <li class="fragment">
+              Define a versioning policy (semantic versioning, calendar versioning)
+              <ul>
+                <li>and a deprecation policy with it</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Coding standards</h1>
+          <ul>
+            <li>
+              Every change should have a unit test attached to it - users don't care but your future self or other
+              maintainers will thank you for it
+            </li>
+            <li class="fragment">Every change should have a changelog attached to it</li>
+          </ul>
+          <img
+            alt="Silky & Junior"
+            src="./img/junior_sand.jpg"
+            style="max-height: 700px; margin-left: auto; margin-right: auto; margin-bottom: 0"
+          />
+          <p style="font-size: 10px; margin: 0 0">Copyright 2024 Bernat Gabor All rights reserved</p>
+        </section>
+
+        <section>
+          <h1>Code quality</h1>
+          <ul>
+            <li>
+              Good code style is (sometimes) subjective - take the emotion out of it
+              <ul>
+                <li>pre-commit</li>
+                <li>ruff</li>
+              </ul>
+            </li>
+            <li class="fragment">
+              Consistent architecture is better than great one, prioritize maintainers opinions drive-by contributors
+            </li>
+            <li class="fragment">
+              Good PR (commit) title and body are rare, and that's alright - do squash merge and adjust before merge
+            </li>
+          </ul>
+          <img
+            alt="Silky & Junior"
+            src="./img/silky_sand.jpg"
+            style="max-height: 580px; margin-left: auto; margin-right: auto; margin-bottom: 0"
+          />
+          <p style="font-size: 10px; margin: 0 0">Copyright 2024 Bernat Gabor All rights reserved</p>
+        </section>
+
+        <section>
+          <h3>How to attract people to your projects</h3>
+          <h4>Create a community</h4>
+          <ul>
+            <li>Your issue tracker is great async channel</li>
+            <li>Create a sync channel (such as a discord server)</li>
+            <li>Advertise your project (X/Mastodon/HackerNews, Conference/meetups)</li>
+            <li>Answer (some) questions on Stack Overflow</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>How to attract maintainers to your projects</h3>
+          <ul>
+            <li>If people contribute a few times and their work is high quality invite them to be co-maintainer</li>
+            <li class="fragment">Be (slightly) liberal on handing out these</li>
+            <li class="fragment">
+              Mentor them, online if they are ok with that or if you know them in real life
+              <ul>
+                <li>Have video calls with them, explain the architecture</li>
+                <li>Give ample feedback in the first few weeks</li>
+                <li>Involve them in decision-making</li>
+                <li>Ask them to do the next release</li>
+                <li>Make sure you're not in the hot path</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>What does a maintainer gets?</h1>
+          <ul>
+            <li class="fragment">looks good on your CV</li>
+            <li class="fragment">broaden your horizon - you meet new people and learn how to communicate with each</li>
+            <li class="fragment">potentially mentoring experience</li>
+            <li class="fragment">thanks from contributors upon merge and/or release</li>
+            <li class="fragment">using new technologies, Python versions and libraries</li>
+            <li class="fragment">
+              have an on-hand source of topic for conference talks (either related to the project or your experience
+              maintaining it)
+            </li>
+            <li class="fragment">potentially get paid for it, in some way</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Remember to get paid!</h1>
+          <ul>
+            <li class="fragment">Indirectly by your main employer by spending some work time on OSS</li>
+            <li class="fragment">Github Sponsors</li>
+            <li class="fragment">
+              Tidelift - requires you to commit to fix discovered security vulnerabilities (thanks log4j)
+            </li>
+            <li class="fragment">thanks.dev</li>
+          </ul>
+          <img
+            alt="Silky & Junior"
+            src="./img/silky_junior_park.jpg"
+            style="max-height: 640px; margin-left: auto; margin-right: auto; margin-bottom: 0"
+          />
+          <p style="font-size: 10px; margin: 0 0">Copyright 2024 Bernat Gabor All rights reserved</p>
+        </section>
+
+        <section>
+          <h1>General</h1>
+          <ul>
+            <li>Accept that it will never be done</li>
+            <li>Be patient, users are bad at reading documentation</li>
+            <li>Eat your own dog food - work of forks, make PRs for (almost) every change - work in public</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>How do you become a maintainer?</h1>
+          <ul>
+            <li>Pick something you actively use on a daily basis</li>
+            <li class="fragment">Read the documentation of it in detail</li>
+            <li class="fragment">Read a few issues and see if you can understand the issue and where in code is</li>
+            <li class="fragment">Reach out to the current maintainer and see if your approach to solve it is right</li>
+            <li class="fragment">
+              Rinse and repeat until you get the maintainer flag - lot of work, will not take long
+            </li>
+            <li class="fragment">
+              Start with an easy issue (small bug, feature, documentation - bugs are often deceptive)
+            </li>
+            <li class="fragment">Is OK if a few weeks of doing this you decide it's not for you</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>Ensure you can keep doing it</h1>
+          <ul>
+            <li>
+              Prioritize over anything else your:
+              <ul>
+                <li>Mental health</li>
+                <li>Physical health</li>
+              </ul>
+            </li>
+            <p class="fragment">
+              Taking a month break or spending x% of your time on the project is better than quitting or burning out
+            </p>
+            <p class="fragment">
+              Step away once you no longer enjoy it, either for a temporary or permanent break (if not other maintainers
+              communicate these)
+            </p>
+          </ul>
+        </section>
+
+        <section>
+          <h2>How long should you expect to keep doing it?</h2>
+          <ul>
+            <li class="fragment">As long as you (mostly) enjoy it</li>
+            <li class="fragment">As long as you keep using the tool or library in question</li>
+          </ul>
+          <img
+            alt="Silky & Junior"
+            src="./img/silky_junior_enjoy.jpg"
+            style="max-height: 800px; margin-left: auto; margin-right: auto; margin-bottom: 0"
+          />
+          <p style="font-size: 10px; margin: 0 0">Copyright 2024 Bernat Gabor All rights reserved</p>
+        </section>
+
+        <section>
+          <h1>Questions?</h1>
+          <ul>
+            <li class="fragment">Find me after at the conference!</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>thank you</h1>
+          <div>
+            <img data-src="img/silky_beach.jpg" style="margin-bottom: 0; border-bottom: 0; max-height: 820px" />
+            <p style="font-size: 12px; margin: 0 0">Copyright 2024 Bernat Gabor All rights reserved</p>
+          </div>
+          <p>
+            <a href="https://www.bernat.tech">https://www.bernat.tech</a>
+          </p>
+        </section>
+
+        <section>
+          <h1>we're hiring</h1>
+          <h3><a href="https://www.TechAtBloomberg.com/python">TechAtBloomberg.com/python</a></h3>
+          <h3><a href="https://bloomberg.com/engineering">bloomberg.com/engineering</a></h3>
+          <p>
+            <a href="https://twitter.com/techatbloomberg">@TechAtBloomberg</a>
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/menu/menu.js"></script>
+    <script>
+      Reveal.initialize({
+        width: 1920,
+        height: 1080,
+        margin: 0,
+        minScale: 0.5,
+        maxScale: 1.0,
+        hash: true,
+        fragmentInURL: true,
+        hashOneBasedIndex: true,
+        hashOneBasedIndex: true,
+        pdfMaxPagesPerSlide: 1,
+        history: true,
+        center: true,
+        touch: true,
+        previewLinks: true,
+        navigationMode: "linear",
+        transition: "none",
+        viewDistance: 10,
+        mobileViewDistance: 6,
+        controls: false,
+        controlsTutorial: false,
+        progress: false,
+        plugins: [RevealHighlight],
+      });
+    </script>
+    <div style="position: absolute; bottom: 2px; right: 2px; width: 10em; z-index: 1000">
+      <p
+        style="
+          color: #656262;
+          font-family: Helvetica, sans-serif;
+          font-weight: bold;
+          font-size: 1.75em;
+          margin: 0 2px 2px 0;
+          text-align: center;
+        "
+      >
+        Bloomberg
+      </p>
+      <p style="text-align: center; font-weight: bold; font-size: 0.7em; margin: 0 auto; color: #767676c0">
+        &copy; 2024 Bloomberg Finance L.P. <br />All rights reserved.
+      </p>
+    </div>
+  </body>
 </html>
