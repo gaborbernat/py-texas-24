@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -30,8 +30,7 @@
 
       @font-face {
         font-family: "Inconsolata Patched";
-        src:
-          local("Inconsolata Patched"),
+        src: local("Inconsolata Patched"),
           url("dist/theme/fonts/Inconsolata Regular Nerd Font Complete Mono.otf") format("opentype");
       }
       .maintain img {
@@ -59,7 +58,7 @@
           <h3>Who am I?</h3>
           <div>
             <ul>
-              <li>software engineer at Bloomberg (DTI Storage Platform team)</li>
+              <li>software engineer at Bloomberg (Data Technologies - Storage Platform team)</li>
               <li class="fragment">based out of Los Angeles, USA - from Transylvania</li>
             </ul>
           </div>
@@ -146,6 +145,7 @@
           <ul class="fragment">
             Per
             <a href="https://www.dictionary.com/browse/maintainer">dictionary.com</a>
+            <span style="font-style: italic">maintain</span>
             is defined as
             <li>to keep in existence or continuance; preserve; retain</li>
             <li>to keep in an appropriate condition, operation, or force; keep unimpaired</li>
@@ -158,6 +158,7 @@
           <ul>
             Per
             <a href="https://www.dictionary.com/browse/maintainer">dictionary.com</a>
+            <span style="font-style: italic">maintain</span>
             is defined as
             <li>to keep in existence or continuance; preserve; retain</li>
             <li>
@@ -178,7 +179,10 @@
           </ul>
           <p class="fragment">
             that would be a <span style="color: orangered; font-weight: bolder">contributor</span
-            ><span class="fragment">, however you can fill both roles</span>
+            ><span class="fragment"
+              ><br />
+              however, you can fill both roles</span
+            >
           </p>
         </section>
 
@@ -219,7 +223,7 @@
 
         <section>
           <h2>What does a maintainer do?</h2>
-          <h4>Groom incoming bug reports</h4>
+          <h4>Triage incoming bug reports</h4>
           <img data-src="img/groom_issues.png" style="margin-bottom: 0; border-bottom: 0; max-height: 810px" />
         </section>
 
@@ -246,7 +250,7 @@
               >
             </li>
             <div class="fragment">
-              <li>we all have different communication style</li>
+              <li>we all have different communications styles</li>
               <img data-src="img/non_standard.webp" style="margin-bottom: 0; border-bottom: 0; max-height: 610px" />
               <p style="font-size: 10px; margin: 0 0">Copyright 2023 Ned Batchelder All rights reserved</p>
             </div>
@@ -260,7 +264,7 @@
             <a href="https://nedbatchelder.com/text/key23.htmlhttps://nedbatchelder.com/text/key23.html"
               >Ned Batchelder - People: The API User’s Guide</a
             >
-            <li>in written form is even harder, because you lose context, attention</li>
+            <li>is even harder in written form because you lose context, attention</li>
           </ul>
           <img data-src="img/stressed_slack.webp" style="margin-bottom: 0; border-bottom: 0; max-height: 610px" />
           <p style="font-size: 10px; margin: 0 0">Copyright 2023 Ned Batchelder All rights reserved</p>
@@ -271,7 +275,7 @@
           <h2 style="color: orange">In general</h2>
           <ul>
             <li class="fragment">be polite and patient</li>
-            <li class="fragment">give benefit of doubt, could be different communication style</li>
+            <li class="fragment">give benefit of doubt, could be a different style of communication</li>
             <li class="fragment">
               refrain from tagging people (especially maintainers) upfront
               <ul>
@@ -294,14 +298,17 @@
           <ul>
             <li class="fragment">Always start to see if there's an issue already open</li>
             <li class="fragment">Docker image reproducing the issue</li>
-            <li class="fragment">A Github repository containing all the files I need to reproduce it</li>
+            <li class="fragment">A GitHub repository containing all the files I need to reproduce it</li>
             <li class="fragment">
               Detailed description of:
               <ul>
                 <li>Environment you run in (OS, Python version, packages installed)</li>
-                <li>How did you install the package (PyPI or OS package manager)</li>
+                <li>How you installed the package (PyPI or OS package manager)</li>
                 <li>Full stacktrace of the error</li>
-                <li>When in doubt error on side of more than less, but at least what the template requires</li>
+                <li>
+                  When in doubt, err on the side of including more info than less, but at least share what the template
+                  requires
+                </li>
               </ul>
             </li>
           </ul>
@@ -323,17 +330,17 @@
         <section>
           <h2>What does a maintainer do?</h2>
           <h4>Reject feature requests</h4>
-          <p>Think of the long term good rather than short term</p>
+          <p>Think of the long-term good rather than short term gain</p>
           <img data-src="img/junior_bed.jpg" style="margin-bottom: 0; border-bottom: 0; max-height: 800px" />
           <p style="font-size: 10px; margin: 0 0">Copyright 2024 Bernat Gabor All rights reserved</p>
         </section>
 
         <section>
           <h2 style="color: orange">Tips for users</h2>
-          <h4 style="color: darkgreen">How to fill excellent feature requests</h4>
+          <h4 style="color: darkgreen">How to file excellent feature requests</h4>
           <ul>
-            <li class="fragment">Read the documentation to check if alternative solution exists</li>
-            <li class="fragment">If in doubt open a discussion to enquire how to solve problem X</li>
+            <li class="fragment">Read the documentation to check if an alternative solution exists</li>
+            <li class="fragment">If in doubt, open a discussion to enquire how to solve problem X</li>
             <li class="fragment">Indicate if you're willing to do the work</li>
           </ul>
         </section>
@@ -352,19 +359,19 @@
 
         <section>
           <h2>What does a maintainer do?</h2>
-          <h4>Thank from contributors upon merge and/or release</h4>
+          <h4>Thank contributors upon merge and/or release</h4>
           <img data-src="img/thanks_merge.png" style="margin-bottom: 0; border-bottom: 0; max-height: 880px" />
         </section>
 
         <section>
           <h2>What does a maintainer do?</h2>
-          <h4>Ensures the projects architecture remains consistent</h4>
+          <h4>Ensures the project's architecture remains consistent</h4>
           <ul>
             This is more of an art than exact science
             <li class="fragment">make sure the project has right separation of concerns</li>
-            <li class="fragment">when adding new code make sure it lives in the appropriate section</li>
+            <li class="fragment">when adding new code, make sure it lives in the appropriate section</li>
             <li class="fragment">
-              if has a plugin system use it, rather than introduce a new mechanism to extend the code
+              if it has a plugin system use it, rather than introduce a new mechanism to extend the code
             </li>
           </ul>
         </section>
@@ -388,7 +395,7 @@
             <span style="color: orange; font-weight: bolder"
               >IMHO -
               <span style="color: orange; font-style: italic; font-weight: bolder"
-                >keep in an appropriate condition, operation</span
+                >keep the project in an appropriate condition, operational</span
               ></span
             >
           </h5>
@@ -427,7 +434,7 @@
         <section>
           <h3>How to attract people to your projects</h3>
           <h4>Ensure CI remains green</h4>
-          <p>Run it daily on main branch and action failure e-mails</p>
+          <p>Run it daily on the main branch and action failure e-mails</p>
           <img data-src="img/ci_green.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
         </section>
 
@@ -441,20 +448,20 @@
         <section>
           <h3>How to attract people to your projects</h3>
           <h4>Ensure CI remains fast</h4>
-          <p>Quick feedback, more likely to stick pushing it through</p>
+          <p>Quick feedback loop means they are more likely to stick with it and make sure it lands</p>
           <img data-src="img/ci_green.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
         </section>
 
         <section>
           <h3>How to attract people to your projects</h3>
           <h4>Ensure CI remains fast</h4>
-          <p>Quick feedback, more likely to stick pushing it through</p>
+          <p>Quick feedback loop means they are more likely to stick with it and make sure it lands</p>
           <img data-src="img/ci_red.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
         </section>
 
         <section>
           <h3>How to attract people to your projects</h3>
-          <h4>Ensure your documentation build works and run it part of PR</h4>
+          <h4>Ensure your documentation build works and run it as part of the PR</h4>
           <p>readthedocs.org is great for this</p>
           <img data-src="img/readthedocs_ci.png" style="margin-bottom: 0; border-bottom: 0; max-height: 780px" />
         </section>
@@ -478,11 +485,13 @@
           <h3>Make it easy to do releases</h3>
           <ul>
             <li>Release often (and small diffs)</li>
-            <li class="fragment">contributors can use quicker their changes - more motivated to contribute more</li>
+            <li class="fragment">
+              contributors can use their changes more quickly - more motivated to contribute again
+            </li>
             <li class="fragment">
               Define a versioning policy (semantic versioning, calendar versioning)
               <ul>
-                <li>and a deprecation policy with it</li>
+                <li>and a deprecation policy along with it</li>
               </ul>
             </li>
           </ul>
@@ -516,7 +525,10 @@
               </ul>
             </li>
             <li class="fragment">
-              Consistent architecture is better than great one, prioritize maintainers opinions over contributors
+              <span
+                >A consistent architecture is better than a great one<br />Prioritize maintainers' opinions over
+                contributors</span
+              >
             </li>
             <li class="fragment">
               Good PR (commit) title and body are rare, and that's alright - do squash merge and adjust before merge
@@ -535,8 +547,8 @@
           <h4>Create a community</h4>
           <ul>
             <li>Your issue tracker is great async channel</li>
-            <li>Create a sync channel (such as a discord server)</li>
-            <li>Advertise your project (X/Mastodon/HackerNews, Conference/meetups)</li>
+            <li>Create a sync channel (such as a Discord server)</li>
+            <li>Advertise your project (X/Mastodon/Hacker News, Conference/meetups)</li>
             <li>Answer (some) questions on Stack Overflow</li>
           </ul>
         </section>
@@ -544,10 +556,10 @@
         <section>
           <h3>How to attract maintainers to your projects</h3>
           <ul>
-            <li>If people contribute a few times and their work is high quality invite them to be co-maintainer</li>
+            <li>If people contribute a few times and their work is high quality, invite them to be co-maintainer</li>
             <li class="fragment">Be (slightly) liberal on handing out these</li>
             <li class="fragment">
-              Mentor them, online if they are ok with that or if you know them in real life
+              Mentor them online if they are okay with that, or in-person if you know them in real life
               <ul>
                 <li>Have video calls with them, explain the architecture</li>
                 <li>Give ample feedback in the first few weeks</li>
@@ -560,15 +572,15 @@
         </section>
 
         <section>
-          <h1>What does a maintainer gets?</h1>
+          <h1>What does a maintainer get</h1>
           <ul>
             <li class="fragment">looks good on your CV</li>
-            <li class="fragment">broaden your horizon - you meet new people and learn how to communicate with each</li>
-            <li class="fragment">potentially mentoring experience</li>
+            <li class="fragment">broadens your horizon - you meet new people and learn how to communicate with each</li>
+            <li class="fragment">mentoring experience (potentially)</li>
             <li class="fragment">thanks from contributors upon merge and/or release</li>
-            <li class="fragment">using new technologies, Python versions and libraries</li>
+            <li class="fragment">opportunities to use new technologies, Python versions and libraries</li>
             <li class="fragment">
-              have an on-hand source of topic for conference talks (either related to the project or your experience
+              a handy source of topics for conference talks (either related to the project or your experience
               maintaining it)
             </li>
             <li class="fragment">potentially get paid for it, in some way</li>
@@ -579,7 +591,7 @@
           <h1>Remember to get paid!</h1>
           <ul>
             <li class="fragment">Indirectly by your main employer by spending some work time on OSS</li>
-            <li class="fragment">Github Sponsors</li>
+            <li class="fragment">GitHub Sponsors</li>
             <li class="fragment">
               Tidelift - requires you to commit to fix discovered security vulnerabilities (thanks log4j)
             </li>
@@ -606,18 +618,18 @@
           <h1>How do you become a maintainer?</h1>
           <ul>
             <li>Pick something you actively use on a semi-regular basis</li>
-            <li class="fragment">Read the documentation of it in detail</li>
+            <li class="fragment">Read the documentation in detail</li>
             <li class="fragment">
               Read a few issues and see if you can understand the issue (and where a fix in the code would be)
             </li>
             <li class="fragment">Reach out to the current maintainer and see if your approach to solve it is right</li>
             <li class="fragment">
-              Rinse and repeat until you get the maintainer flag - lot of work, will not take long
+              Rinse and repeat until you get the maintainer flag - lot of work, but won't take long in general
             </li>
             <li class="fragment">
               Start with an easy issue (small bug, feature, documentation - bugs are often deceptive)
             </li>
-            <li class="fragment">Is OK if a few weeks of doing this you decide it's not for you</li>
+            <li class="fragment">It's okay if you decide it's not for you after a few weeks of doing this</li>
           </ul>
         </section>
 
@@ -635,8 +647,8 @@
               Taking a month break or spending x% of your time on the project is better than quitting or burning out
             </p>
             <p class="fragment">
-              Step away once you no longer enjoy it, either for a temporary or permanent break (if not other maintainers
-              communicate these)
+              Step away once you no longer enjoy it, either for a temporary or permanent break (if there are no other
+              maintainers, make sure to communicate these breaks)
             </p>
           </ul>
         </section>
